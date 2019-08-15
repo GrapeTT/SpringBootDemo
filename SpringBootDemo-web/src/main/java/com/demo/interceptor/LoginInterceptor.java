@@ -32,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(uid != null){
             if("register".equals(uid)) {
                 //如果是注册，则只能放行注册需要的请求
-                if(url.endsWith("/getValidateCode") || url.endsWith("/register") || url.endsWith("/getMajorList") || url.endsWith("/getClassList")) {
+                if(url.endsWith("/getValidateCode") || url.endsWith("/register")) {
                     return true;
                 } else {
                     //跳转注册页面
