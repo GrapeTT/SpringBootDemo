@@ -33,6 +33,39 @@ public class EmailClient {
     private String authCode;
     //邮件主题
     private String title;
+    //系统属性
+    private Properties properties = null;
+    //默认session对象
+    private Session session = null;
+    
+    /**
+     * @Description：初始化系统属性和默认session对象
+     * @Author：涛哥
+     * @Time：2019/3/28 16:02
+     */
+    private void init() {
+        if(properties == null) {
+            properties = System.getProperties();
+            // 设置邮件服务器
+            properties.setProperty("mail.smtp.host", host);
+            //设置端口
+            properties.setProperty("mail.smtp.port", port);
+            //设置认证
+            properties.put("mail.smtp.auth", isAuth);
+    
+            properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            properties.setProperty("mail.smtp.socketFactory.fallback", "false");
+            properties.setProperty("mail.smtp.socketFactory.port", port);
+        }
+        if(session == null) {
+            session = Session.getDefaultInstance(properties, new Authenticator(){
+                public PasswordAuthentication getPasswordAuthentication()
+                {
+                    return new PasswordAuthentication(sender, authCode); //发件人邮件用户名、授权码
+                }
+            });
+        }
+    }
     
     /**
      * @Description：发送邮件
@@ -41,29 +74,8 @@ public class EmailClient {
      * @Time：2019/3/28 16:02
      */
     public String sendEmail(String receiver) {
-        // 获取系统属性
-        Properties properties = System.getProperties();
-        
-        // 设置邮件服务器
-        properties.setProperty("mail.smtp.host", host);
-        
-        //设置端口
-        properties.setProperty("mail.smtp.port", port);
-        
-        //设置认证
-        properties.put("mail.smtp.auth", isAuth);
-        
-        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.setProperty("mail.smtp.socketFactory.fallback", "false");
-        properties.setProperty("mail.smtp.socketFactory.port", port);
-        
-        // 获取默认session对象
-        Session session = Session.getDefaultInstance(properties, new Authenticator(){
-            public PasswordAuthentication getPasswordAuthentication()
-            {
-                return new PasswordAuthentication(sender, authCode); //发件人邮件用户名、授权码
-            }
-        });
+        // 初始化系统属性和默认session对象
+        init();
         
         //生成验证码
         String validateCode = buildValidateCode();

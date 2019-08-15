@@ -4,6 +4,7 @@ import com.demo.api.Message;
 import com.demo.base.BaseController;
 import com.demo.domain.User;
 import com.demo.email.EmailClient;
+import com.demo.exception.CustomException;
 import com.demo.redis.RedisClient;
 import com.demo.service.UserService;
 import com.demo.tools.*;
@@ -71,7 +72,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request) throws Exception {
         request.getSession().invalidate();
         return "login";
     }

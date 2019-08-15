@@ -1,11 +1,10 @@
 package com.demo.exception;
 
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * @Name：CustomExceptionResolver
@@ -15,18 +14,42 @@ import javax.servlet.http.HttpServletResponse;
  * @Date：2018/4/7 14:16
  * @Version：1.0
  */
-public class CustomExceptionResolver implements HandlerExceptionResolver {
-    @Override
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        CustomException customException = null;
-        if(ex instanceof CustomException){
-            customException = (CustomException)ex;
+@ControllerAdvice
+public class CustomExceptionResolver {
+    /**
+     * @Description：404
+     * @Author：涛哥
+     * @Time：2019/3/6 16:54
+     */
+    @ExceptionHandler(value = NoHandlerFoundException.class)
+    public String resolve404() {
+        return "errorPage/404";
+    }
+    
+    /**
+     * @Description：405
+     * @Author：涛哥
+     * @Time：2019/3/6 16:54
+     */
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public String resolve405() {
+        return "errorPage/405";
+    }
+    
+    /**
+     * @Description：500
+     * @Author：涛哥
+     * @Time：2019/3/6 16:54
+     */
+    @ExceptionHandler(value = Exception.class)
+    public String resolve500(Exception e, Model view) {
+        CustomException customException;
+        if(e instanceof CustomException){
+            customException = (CustomException)e;
         } else {
             customException = new CustomException("对不起，服务器发生未知错误");
         }
-        String error = customException.getMessage();
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("error", error);
-        return modelAndView;
+        view.addAttribute("error", customException.getMessage());
+        return "errorPage/error";
     }
 }

@@ -22,10 +22,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //获取url
         String url = request.getRequestURI();
-        //判断url是否是公开地址（实际使用时将公开地址配置在文件中）
-        //这里公开地址是登陆提交的地址
-        if(url.equals("/") || url.endsWith("/login") || url.endsWith("/getRegisterPage") || url.endsWith("/contactAdmin") || url.startsWith("/password") || url.endsWith("/logout") || url.startsWith("/error")){
-            //如果进行登陆提、注册、联系管理员、请求首页、找回密码、登出、错误提示，放行
+        //如果进行登陆、注册、找回密码、登出，放行
+        if(url.equals("/") || url.endsWith("/login") || url.endsWith("/getRegisterPage") || url.startsWith("/password") || url.endsWith("/logout")){
             return true;
         }
         //取出用户身份信息
@@ -42,20 +40,8 @@ public class LoginInterceptor implements HandlerInterceptor {
                     return false;
                 }
             } else {
-                //如果还未加入实验室，则只能修改个人信息、邮箱、密码、申请加入实验室
-                Integer role = SessionUtils.getRole(request.getSession());
-                if(role > 5) {
-                    if(url.endsWith("/personalSpace/clock") || url.startsWith("/apply") || url.startsWith("/major") || url.startsWith("/class") || url.startsWith("/userInfo") || url.startsWith("/user") || url.startsWith("/editInfo")) {
-                        return true;
-                    } else {
-                        //跳转申请加入实验室页面
-                        request.getRequestDispatcher("/personalSpace/clock").forward(request, response);
-                        return false;
-                    }
-                } else {
-                    //身份存在，放行
-                    return true;
-                }
+                //身份存在，放行
+                return true;
             }
         }
         //执行这里表示用户身份需要认证，跳转登陆页面

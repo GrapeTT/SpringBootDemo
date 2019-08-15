@@ -31,7 +31,7 @@
         <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
             <li class="nav-item dropdown ml-auto"><a id="userInfo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="/resources/images/default_user.jpg" alt="Jason Doe" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
                 <div aria-labelledby="userInfo" class="dropdown-menu">
-                    <a href="javascript:" class="dropdown-item" style="cursor: default!important;"><strong class="d-block text-uppercase headings-font-family" style="font-size: 17px!important;">$!{userpin}</strong><small>UID：$!{uid}</small></a>
+                    <a href="javascript:" class="dropdown-item" style="cursor: default!important;"><strong class="d-block text-uppercase headings-font-family" style="font-size: 17px!important;"><span th:text="${session.userpin}"></span></strong><small>UID：<span th:text="${session.uid}"></small></a>
                     <div class="dropdown-divider"></div><a href="/user/logout" class="dropdown-item"><i class="o-exit-1 mr-3"></i>登 出</a>
                 </div>
             </li>
