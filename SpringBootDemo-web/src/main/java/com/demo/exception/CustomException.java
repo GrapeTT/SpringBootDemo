@@ -9,6 +9,8 @@ package com.demo.exception;
  * @Version：1.0
  */
 public class CustomException  extends Exception{
+    //编码
+    private String code= "500";
     //异常信息
     private String message;
     
@@ -16,6 +18,12 @@ public class CustomException  extends Exception{
 
     public CustomException(String message) {
         super(message);
+        this.message = message;
+    }
+    
+    public CustomException(String code, String message) {
+        super(message);
+        this.code = code;
         this.message = message;
     }
 
