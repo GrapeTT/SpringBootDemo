@@ -72,6 +72,10 @@ public class Message {
         return create("000", msg);
     }
     
+    public static Message failure(String code, String msg) {
+        return create(code, msg);
+    }
+    
     public static Message failure(Exception ex) {
         return failure("exception:" + ex.getMessage(), ex);
     }
