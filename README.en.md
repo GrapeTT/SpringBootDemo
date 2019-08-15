@@ -1,7 +1,7 @@
 # SpringBootDemo
 
 #### Description
-SpringBoot项目框架
+SpringBoot project framework (Front and back not separated)
 
 #### Software Architecture
 Software architecture description

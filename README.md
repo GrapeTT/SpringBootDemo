@@ -1,7 +1,7 @@
 # SpringBootDemo
 
 #### 介绍
-SpringBoot项目框架
+SpringBoot项目框架（前后端未分离）
 
 #### 软件架构
 软件架构说明
