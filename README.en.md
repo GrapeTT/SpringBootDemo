@@ -1,7 +1,7 @@
 # SpringBootDemo
 
 #### Description
-SpringBoot Project Framework (Front and Back Not Separated)
+SpringBoot project framework (Front and back not separated)
 
 #### Software Architecture
 Software architecture description
