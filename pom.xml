@@ -47,15 +47,15 @@
                 <springbootdemo.mysql.username>root</springbootdemo.mysql.username>
                 <springbootdemo.mysql.password>666666</springbootdemo.mysql.password>
                 <!-- redis配置 -->
-                <springbootdemo.redis.host>120.79.60.67</springbootdemo.redis.host>
+                <springbootdemo.redis.host>127.0.0.1</springbootdemo.redis.host>
                 <springbootdemo.redis.port>6379</springbootdemo.redis.port>
                 <springbootdemo.redis.password>666666</springbootdemo.redis.password>
                 <!-- 邮件配置 -->
                 <springbootdemo.email.host>smtp.qq.com</springbootdemo.email.host>
                 <springbootdemo.email.port>465</springbootdemo.email.port>
-                <springbootdemo.email.sender>swustlabmanager@qq.com</springbootdemo.email.sender>
+                <springbootdemo.email.sender>XXX</springbootdemo.email.sender>
                 <springbootdemo.email.isAuth>true</springbootdemo.email.isAuth>
-                <springbootdemo.email.authCode>eygofdqjpmsgbegh</springbootdemo.email.authCode>
+                <springbootdemo.email.authCode>XXX</springbootdemo.email.authCode>
                 <!-- 日志配置 -->
                 <springbootdemo.log.level>DEBUG</springbootdemo.log.level>
             </properties>
@@ -71,15 +71,15 @@
                 <springbootdemo.mysql.username>root</springbootdemo.mysql.username>
                 <springbootdemo.mysql.password>666666</springbootdemo.mysql.password>
                 <!-- redis配置 -->
-                <springbootdemo.redis.host>120.79.60.67</springbootdemo.redis.host>
+                <springbootdemo.redis.host>127.0.0.1</springbootdemo.redis.host>
                 <springbootdemo.redis.port>6379</springbootdemo.redis.port>
                 <springbootdemo.redis.password>666666</springbootdemo.redis.password>
                 <!-- 邮件配置 -->
                 <springbootdemo.email.host>smtp.qq.com</springbootdemo.email.host>
                 <springbootdemo.email.port>465</springbootdemo.email.port>
-                <springbootdemo.email.sender>swustlabmanager@qq.com</springbootdemo.email.sender>
+                <springbootdemo.email.sender>XXX@qq.com</springbootdemo.email.sender>
                 <springbootdemo.email.isAuth>true</springbootdemo.email.isAuth>
-                <springbootdemo.email.authCode>eygofdqjpmsgbegh</springbootdemo.email.authCode>
+                <springbootdemo.email.authCode>XXX</springbootdemo.email.authCode>
                 <!-- 日志配置 -->
                 <springbootdemo.log.level>INFO</springbootdemo.log.level>
             </properties>
