@@ -10,14 +10,13 @@
     <packaging>pom</packaging>
     
     <name>SpringBootDemo</name>
-    <description>Spring Boot Demo Project</description>
+    <description>SpringBoot Demo Project</description>
 
     <!-- 项目模块列表,请根据项目情况增减 -->
     <modules>
-        <module>SpringBootDemo-dao</module>
         <module>SpringBootDemo-common</module>
+        <module>SpringBootDemo-dao</module>
         <module>SpringBootDemo-service</module>
-        <module>SpringBootDemo-domain</module>
         <module>SpringBootDemo-web</module>
     </modules>
     
@@ -33,55 +32,34 @@
         <jdk.version>1.8</jdk.version>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <start-class>SpringBootDemoApplication</start-class>
+        <springboot.version>2.1.5.RELEASE</springboot.version>
+        <hutool.version>5.7.6</hutool.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
+        <velocity.version>2.2</velocity.version>
+        <mysql-connector.version>8.0.16</mysql-connector.version>
+        <mail.version>1.4.7</mail.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
     </properties>
     
     <profiles>
+        <!-- 开发环境配置 -->
         <profile>
-            <id>develop</id>
+            <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <!-- mysql配置 -->
-                <springbootdemo.mysql.url>jdbc:MySql://127.0.0.1:3306/demo?characterEncoding=UTF-8&amp;serverTimezone=UTC</springbootdemo.mysql.url>
-                <springbootdemo.mysql.username>root</springbootdemo.mysql.username>
-                <springbootdemo.mysql.password>666666</springbootdemo.mysql.password>
-                <!-- redis配置 -->
-                <springbootdemo.redis.host>120.79.60.67</springbootdemo.redis.host>
-                <springbootdemo.redis.port>6379</springbootdemo.redis.port>
-                <springbootdemo.redis.password>666666</springbootdemo.redis.password>
-                <!-- 邮件配置 -->
-                <springbootdemo.email.host>smtp.qq.com</springbootdemo.email.host>
-                <springbootdemo.email.port>465</springbootdemo.email.port>
-                <springbootdemo.email.sender>swustlabmanager@qq.com</springbootdemo.email.sender>
-                <springbootdemo.email.isAuth>true</springbootdemo.email.isAuth>
-                <springbootdemo.email.authCode>eygofdqjpmsgbegh</springbootdemo.email.authCode>
-                <!-- 日志配置 -->
-                <springbootdemo.log.level>DEBUG</springbootdemo.log.level>
+                <env>dev</env>
             </properties>
         </profile>
+        <!-- 生产环境配置 -->
         <profile>
             <id>product</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <!-- mysql配置 -->
-                <springbootdemo.mysql.url>jdbc:MySql://127.0.0.1:3306/demo?characterEncoding=UTF-8&amp;serverTimezone=UTC</springbootdemo.mysql.url>
-                <springbootdemo.mysql.username>root</springbootdemo.mysql.username>
-                <springbootdemo.mysql.password>666666</springbootdemo.mysql.password>
-                <!-- redis配置 -->
-                <springbootdemo.redis.host>120.79.60.67</springbootdemo.redis.host>
-                <springbootdemo.redis.port>6379</springbootdemo.redis.port>
-                <springbootdemo.redis.password>666666</springbootdemo.redis.password>
-                <!-- 邮件配置 -->
-                <springbootdemo.email.host>smtp.qq.com</springbootdemo.email.host>
-                <springbootdemo.email.port>465</springbootdemo.email.port>
-                <springbootdemo.email.sender>swustlabmanager@qq.com</springbootdemo.email.sender>
-                <springbootdemo.email.isAuth>true</springbootdemo.email.isAuth>
-                <springbootdemo.email.authCode>eygofdqjpmsgbegh</springbootdemo.email.authCode>
-                <!-- 日志配置 -->
-                <springbootdemo.log.level>INFO</springbootdemo.log.level>
+                <env>product</env>
             </properties>
         </profile>
     </profiles>
@@ -91,93 +69,61 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.5.RELEASE</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <!-- 日志依赖 -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <optional>true</optional>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.26</version>
-                <scope>compile</scope>
             </dependency>
             <!-- MySQL依赖 -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.16</version>
+                <version>${mysql-connector.version}</version>
             </dependency>
-            <!-- mybatis依赖 -->
+            <!-- mybatis-plus依赖 -->
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>3.5.2</version>
-                <scope>compile</scope>
-            </dependency>
-            <!-- mybatis 分页插件 -->
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>1.2.10</version>
-            </dependency>
-            <!-- 数据库连接池 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>1.1.17</version>
-            </dependency>
-            <!-- json依赖 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>1.2.58</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>5.1.8.RELEASE</version>
-                <scope>compile</scope>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>2.9.8</version>
-                <scope>compile</scope>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
+            <!-- hutool工具 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
             <!-- 邮件服务依赖 -->
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
-                <version>1.4.7</version>
+                <version>${mail.version}</version>
             </dependency>
             <!-- Apache工具 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.9</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
+            <!--rabbitmq-->
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>3.2.2</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>${springboot.version}</version>
             </dependency>
-    
             <!-- 引入thymelaf 则不需要引入web依赖，若不需要thymelaf则需要添加spring-boot-starter-web -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-thymeleaf</artifactId>
-                <version>2.1.6.RELEASE</version>
+                <version>${springboot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -188,6 +134,12 @@
     </dependencyManagement>
     
     <build>
+        <!-- 指定filter,根据最终profile下的env属性获取对应的配置文件 -->
+        <filters>
+            <filter>../filters/${env}/application.properties</filter>
+            <filter>../filters/${env}/important.properties</filter>
+            <filter>../filters/${env}/jsf-consumer.properties</filter>
+        </filters>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
