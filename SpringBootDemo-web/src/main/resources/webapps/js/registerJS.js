@@ -57,7 +57,7 @@ registerJS.register = function () {
         openTips(3, "验证码不能为空");
         return false;
     }
-    if(userValidateCode.length != 4 || isNaN(userValidateCode)) {
+    if(userValidateCode.length != 6 || isNaN(userValidateCode)) {
         openTips(3, "验证码错误");
         return false;
     }
