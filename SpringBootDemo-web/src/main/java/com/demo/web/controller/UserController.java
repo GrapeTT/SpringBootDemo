@@ -3,6 +3,7 @@ package com.demo.web.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.demo.api.constant.ErrorCode;
 import com.demo.api.model.Message;
+import com.demo.common.exception.AppException;
 import com.demo.web.base.BaseController;
 import com.demo.dao.domain.User;
 import com.demo.common.email.EmailClient;
@@ -11,6 +12,7 @@ import com.demo.common.tools.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +30,16 @@ import java.util.*;
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
+    /**
+     * 业务key
+     */
+    private static final String BUS_KEY = "register";
+    
     @Resource
     private UserService userService;
     
-    @Resource
-    private EmailClient emailClient;
-    
-    //用于保存生成的验证码
-    private static Map<String, String> VALIDATECODES = new HashMap<>();
+    @Autowired
+    private ValidateUtils validateUtils;
     
     /**
      * @Description：登录
@@ -43,7 +47,7 @@ public class UserController extends BaseController {
      * @Time：2019/3/6 16:54
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public @ResponseBody Message login(@RequestBody User condition, HttpSession session, Model view) throws Exception {
+    public @ResponseBody Message<Void> login(@RequestBody User condition, HttpSession session, Model view) throws Exception {
         //校验账号、密码是否正确
         String password = condition.getPassword();
         password = RSAUtils.decrypt(password);
@@ -97,33 +101,22 @@ public class UserController extends BaseController {
      * @Time：2019/4/15 1:01
      */
     @RequestMapping(value = "/getValidateCode", method = RequestMethod.POST)
-    public @ResponseBody Message getValidateCode(@Param("email") String email, Model view) throws Exception {
+    public @ResponseBody Message<Void> getValidateCode(@Param("email") String email, Model view) throws Exception {
         if(StringUtils.isEmpty(email)) {
             return Message.failure(ErrorCode.ILLEGAL_PARAM);
         }
         //如果验证码已获取且未过期，则不让用户再次获取
-        if(VALIDATECODES.get(email) != null) {
+        if(validateUtils.isCodeExsit(BUS_KEY, email)) {
             return Message.failure("验证码未过期，请勿重复获取");
         }
         //验证邮箱是否已注册
         if(userService.isRepeat(email)) {
             return Message.failure("该邮箱已注册，请重新输入");
         }
-        //发送验证码邮件并保存验证码至服务器
-        String validateCode = emailClient.sendEmail(email);
-        if(validateCode == null) {
+        //生成验证码并发送邮件
+        if (!validateUtils.genCodeAndSendEmail(email, BUS_KEY, email)) {
             return Message.failure("验证码发送失败，请稍后再试");
         }
-        VALIDATECODES.put(email, validateCode);
-        //设置验证码5分钟过期
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                VALIDATECODES.remove(email);
-                timer.cancel();
-            }
-        }, 300000);
         return Message.success("验证码已成功发至邮箱");
     }
     
@@ -133,7 +126,7 @@ public class UserController extends BaseController {
      * @Time：2019/4/15 2:20
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public @ResponseBody Message register(User user, String userValidateCode, HttpSession session) throws Exception {
+    public @ResponseBody Message<Void> register(User user, String userValidateCode, HttpSession session) throws Exception {
         if(user == null || StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             return Message.failure("对不起，您没有权限");
         }
@@ -149,14 +142,14 @@ public class UserController extends BaseController {
         }
         //注册用户
         String password;
-        //校验验证码
+        //验证验证码
         String email = user.getUsername();
-        if (VALIDATECODES.get(email) == null) {
-            return Message.failure("验证码已过期，请重新获取");
-        }
-        String validateCode = VALIDATECODES.get(email);
-        if (!validateCode.equals(userValidateCode)) {
-            return Message.failure("验证码错误，请重新输入");
+        try {
+            if (!validateUtils.validateCode(userValidateCode, BUS_KEY, email)) {
+                return Message.failure("验证码错误，请重新输入");
+            }
+        } catch (AppException e) {
+            return Message.failure(e.getMessage());
         }
         //处理密码
         password = user.getPassword();
@@ -178,8 +171,6 @@ public class UserController extends BaseController {
             newUser.setUid(uid);
             userService.updateById(newUser);
         }
-        //清除验证码
-        VALIDATECODES.remove(email);
         return Message.success();
     }
 }
