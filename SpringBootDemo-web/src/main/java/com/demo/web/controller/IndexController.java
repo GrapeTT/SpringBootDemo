@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @Name：IndexController
- * @Package：com.cjpb.controller
+ * @Package：com.demo.controller
  * @Descripition：
  * @Author：涛
  * @Date：2018/3/29 16:32
