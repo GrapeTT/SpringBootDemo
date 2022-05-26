@@ -106,7 +106,7 @@ public class FileController extends BaseController {
             return message;
         } catch (Exception e) {
             LOG.error("文件上传失败", e);
-            return Message.failure(ErrorCode.FAILURE);
+            return Message.failure(ErrorCode.SERVER_ERROR);
         }
     }
     
