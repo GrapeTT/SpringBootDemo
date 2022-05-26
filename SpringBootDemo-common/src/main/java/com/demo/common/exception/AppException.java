@@ -10,7 +10,7 @@ package com.demo.common.exception;
  */
 public class AppException extends Exception{
     //编码
-    private String code= "500";
+    private Integer code = 500;
     //异常信息
     private String message;
     
@@ -21,17 +21,17 @@ public class AppException extends Exception{
         this.message = message;
     }
     
-    public AppException(String code, String message) {
+    public AppException(Integer code, String message) {
         super(message);
         this.code = code;
         this.message = message;
     }
     
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
     
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
     
