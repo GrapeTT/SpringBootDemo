@@ -1,5 +1,6 @@
 package com.demo.web.controller;
 
+import com.demo.api.constant.ErrorCode;
 import com.demo.api.model.Message;
 import com.demo.web.base.BaseController;
 import com.demo.dao.domain.User;
@@ -57,7 +58,7 @@ public class RetrievePasswordController extends BaseController {
     @RequestMapping(value = "/getValidateCode", method = RequestMethod.POST)
     public @ResponseBody Message getValidateCode( @Param("email") String email, Model view) throws Exception {
         if(StringUtils.isEmpty(email)) {
-            return Message.failure("系统异常，请稍后再试");
+            return Message.failure(ErrorCode.ILLEGAL_PARAM);
         }
         //如果验证码已获取且未过期，则不让用户再次获取
         if(VALIDATECODES.get(email) != null) {
@@ -96,7 +97,7 @@ public class RetrievePasswordController extends BaseController {
     @RequestMapping(value = "/reset", method = RequestMethod.POST)
     public @ResponseBody Message resetPassword(@Param("email") String email, @Param("userValidateCode") String userValidateCode, @Param("uid") String uid, @Param("newPassword") String newPassword, Model view) throws Exception {
         if(StringUtils.isEmpty(email) || StringUtils.isEmpty(userValidateCode) || StringUtils.isEmpty(uid) || StringUtils.isEmpty(newPassword)) {
-            return Message.failure("系统异常，请稍后再试");
+            return Message.failure(ErrorCode.ILLEGAL_PARAM);
         }
         if(VALIDATECODES.get(email) == null) {
             return Message.failure("验证码已过期，请重新获取");
